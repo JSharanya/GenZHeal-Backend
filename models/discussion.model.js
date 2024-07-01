@@ -1,28 +1,35 @@
 // const mongoose = require('mongoose')
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const {ObjectId}= mongoose.Schema.Types
+const { ObjectId } = mongoose.Schema.Types;
 
-const commentSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema(
+  {
     userId: {
-        type: ObjectId,
-        ref: 'User',
-        required: true,
+      type: ObjectId,
+      ref: "User",
+      required: true,
     },
     comment: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-    parentCommentId:{
+    parent: {
+      type: ObjectId,
+      ref: "Comment",
+    },
+    child: [
+      {
         type: ObjectId,
-        ref:'Comment'
-    }
+        ref: "Comment",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-}, {
-    timestamps: true
-})
-
-const Comment = mongoose.model('Comment', commentSchema);
+const Comment = mongoose.model("Comment", commentSchema);
 
 export default Comment;

@@ -1,9 +1,12 @@
-import express from 'express'
-import { createComment } from '../controllers/discussion.controller.js';
+import express from "express";
+import {
+  createComment,
+  updateComment,
+} from "../controllers/discussion.controller.js";
 
-const router=express.Router();
+const router = express.Router();
 
-router.post('/',createComment)
-
+router.post("/", createComment);
+router.put("/:commentID", updateComment);
 
 export default router;
