@@ -32,7 +32,7 @@ export const getvirualclub = async (req, res, next) => {
     if (type && type!=='All') {
       filter.type = type;
     }
-    console.log(filter);
+  
 
     const virtualClubs = await Virualclub.find(filter);
     res.status(200).json(virtualClubs);
