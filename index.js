@@ -1,5 +1,6 @@
 import virualclubRoutes from './routes/virualclub.routes.js'
 import authRoutes from './routes/auth.routes.js'
+import appointmentRoutes from "./routes/appointment.route.js";
 // const virualclubRoutes = require('./routes/virualclub.routes.js');
 import commentRoutes from './routes/discussion.routes.js'
 
@@ -19,6 +20,7 @@ app.use(cookieParser())
 
 app.use('/api/virualclub',virualclubRoutes);
 app.use('/api/auth',authRoutes)
+app.use("/api/appointment", appointmentRoutes);
 app.use('/api/comment',commentRoutes)
 
 
