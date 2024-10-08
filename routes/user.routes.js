@@ -1,10 +1,11 @@
 import express from 'express';
-import { changePassword, getUserProfile, updateUserProfile } from '../controllers/user.controller.js';
+import { changePassword, getAllUsers, getUserProfilebyId, updateUserProfile } from '../controllers/user.controller.js';
 
 const router = express.Router();
 
-router.get('/profile', getUserProfile);
-router.put('/profile', updateUserProfile);
+router.get('/profile/:id', getUserProfilebyId);
+router.get('/profile', getAllUsers);
+router.put('/profile/:id', updateUserProfile);
 router.put('/profile/changepassword', changePassword);
 
 export default router;

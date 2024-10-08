@@ -1,29 +1,57 @@
 import bcrypt from 'bcryptjs';
 import User from "../models/auth.model.js";
 
-export const getUserProfile = async (req, res) => {
+export const getUserProfilebyId = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    let _id = req.params.id;
+    const user = await User.findById(_id);
     if (!user) {
-      return res.status(404).send('User not found');
+      return res.status(404).json({ message: "User Not Found !" });
     }
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
-    res.status(500).send('Server error');
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const updateUserProfile = async (req, res) => {
-  try {
-    const { username, email, profilePicture } = req.body;
-    const user = await User.findByIdAndUpdate(
-      req.userId,
-      { username, email, profilePicture },
-      { new: true }
-    );
-    res.json(user);
-  } catch (error) {
-    res.status(500).send('Server error');
+  let _id = req.params.id;
+  const user = await User.findById(_id);
+  if (user) {
+    const originalUserData = {
+      username: user.username,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      password: user.password,
+    };
+
+    user.username = req.body.username || user.username;
+    user.email = req.body.email || user.email;
+    user.profilePicture = req.body.profilePicture || user.profilePicture;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const isUserDataChanged =
+      Object.keys(originalUserData).some(
+        (key) => user[key] !== originalUserData[key]
+      ) ||
+      (req.body.password && req.body.password !== user.password);
+
+    if (isUserDataChanged) {
+      await user.save();
+      res.status(200).json({
+        message: "Profile Updated Succesfully",
+      });
+    } else {
+      return res.status(201).json({
+        message: "No changes made",
+      });
+    }
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
 };
 
@@ -53,5 +81,18 @@ export const changePassword = async (req, res) => {
     res.json({ message: 'Password updated successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (users.length === 0) {
+      return res.status(404).json({ message: "User is Empty !" });
+    }
+    res.status(200).json(users);
+  } catch (err) {
+    console.error("Failed to fetch users from MongoDB:", err);
+    res.status(500).json({ message: err.message });
   }
 };
