@@ -6,6 +6,6 @@ const router = express.Router();
 router.get('/profile/:id', getUserProfilebyId);
 router.get('/profile', getAllUsers);
 router.put('/profile/:id', updateUserProfile);
-router.put('/profile/changepassword', changePassword);
+router.put('/profile/changepassword/:id', changePassword);
 
 export default router;
