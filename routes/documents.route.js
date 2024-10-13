@@ -23,7 +23,8 @@ const storage = multer.diskStorage({
       cb(null, `${Date.now()}-${file.originalname}`);
     }
   });
-  const upload = multer({ storage });
+  
+  const upload = multer({ dest: 'uploads/' });
 
   const router=express.Router();
 

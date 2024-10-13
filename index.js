@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.routes.js'
 import commentRoutes from './routes/discussion.routes.js'
 import appointmentRoutes from "./routes/appointment.route.js";
 import userRoutes from "./routes/user.routes.js";
+import documentsRoutes from "./routes/documents.route.js";
 
 import express from 'express';
 import mongoose from 'mongoose';
@@ -24,6 +25,7 @@ app.use('/api/auth',authRoutes)
 app.use('/api/comment',commentRoutes)
 app.use("/api/appointment", appointmentRoutes);
 app.use('/api/user',userRoutes)
+app.use('/api/documents',documentsRoutes)
 
 
 
