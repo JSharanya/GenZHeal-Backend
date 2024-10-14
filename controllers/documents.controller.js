@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+export const upload = multer({ storage });
 
 export const documents = async (req, res, next) => {
   const { docName, date } = req.body;
