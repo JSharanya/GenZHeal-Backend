@@ -28,23 +28,31 @@ const storage = multer.diskStorage({
 
   const router=express.Router();
 
-router.post('/upload-doc',upload.single('docum'),documents)
+router.post('/upload-doc',upload.single('pdf'),documents)
 router.get('/all-doc',getdocuments )
 router.get('/all-doc/:id',getdocumentsId )
-// router.put('/update-doc/:id',updatedocumentsId)
-router.put('/update-doc/:id', upload.single('docum'), updatedocumentsId);
+router.put('/update-doc/:id', upload.single('pdf'), updatedocumentsId);
 
 router.delete('/delete-doc/:id',deletedocumentsId)
 
-// router.get('/file/:filename', (req, res) => {
-//     const { filename } = req.params;
-//     const filePath = path.join(__dirname, '..', 'uploads', filename);
+
+router.get('/download-pdf/:filename', (req, res) => {
+  const filename = req.params.filename;
+
   
-//     if (fs.existsSync(filePath)) {
-//       res.sendFile(filePath);
-//     } else {
-//       res.status(404).json({ message: 'File not found' });
-//     }
-//   });
+  const directoryPath = path.join(__dirname, '../uploads');
+
+ 
+  const filePath = path.join(directoryPath, filename);
+
+  res.download(filePath, `${filename}.pdf`, (err) => {
+    if (err) {
+      console.error('Error sending file:', err);
+      res.status(404).send('File not found');
+    }
+  });
+});
+
+
 
 export default router;
