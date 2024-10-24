@@ -3,6 +3,12 @@ import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
 
+const isValidPassword = (password) => {
+  const passwordRegex = /^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,12}$/;
+  return passwordRegex.test(password);
+};
+
+
 export const signup = async (req, res, next) => {
   const { username, email, password, address } = req.body;
 
@@ -18,6 +24,15 @@ export const signup = async (req, res, next) => {
   ) {
     next(errorHandler(400, "All fields are required"));
   }
+
+  // if (password.length < 8 || password.length > 12) {
+  //   return next(errorHandler(400, "Password must be between 8 and 12 characters long"));
+  // }
+
+  if (!isValidPassword(password)) {
+    return next(errorHandler(400, "Password must be between 8 and 12 characters long and contain at least one special character"));
+  }
+
 
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
@@ -41,9 +56,18 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
+  if (!isValidPassword(password)) {
+    return next(errorHandler(400, "Password must be between 8 and 12 characters long and contain at least one special character"));
+  }
+
+
   if (!email || !password || email === "" || password === "") {
     next(errorHandler(400, "All fields are requied"));
   }
+
+  // if (password.length < 8 || password.length > 12) {
+  //   return next(errorHandler(400, "Password must be between 8 and 12 characters long"));
+  // }
 
   try {
     const validUser = await User.findOne({ email });
@@ -79,6 +103,15 @@ export const adminSignin = async (req, res, next) => {
   if (!email || !password || email === "" || password === "") {
     return next(errorHandler(400, "All fields are required"));
   }
+
+  if (!isValidPassword(password)) {
+    return next(errorHandler(400, "Password must be between 8 and 12 characters long and contain at least one special character"));
+  }
+
+
+  // if (password.length < 8 || password.length > 12) {
+  //   return next(errorHandler(400, "Password must be between 8 and 12 characters long"));
+  // }
 
   try {
     // Find the user by email
