@@ -22,28 +22,39 @@ export const updateUserProfile = async (req, res) => {
       username: user.username,
       email: user.email,
       profilePicture: user.profilePicture,
+      address: user.address,
       password: user.password,
     };
 
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
+    user.address.street = req.body.address;
+
+    console.log(user)
+    console.log(req.body.address)
 
     if (req.body.password) {
       user.password = req.body.password;
     }
 
     const isUserDataChanged =
-      Object.keys(originalUserData).some(
-        (key) => user[key] !== originalUserData[key]
-      ) ||
-      (req.body.password && req.body.password !== user.password);
+  Object.keys(originalUserData).some((key) => {
+    if (typeof user[key] === 'object') {
+      return JSON.stringify(user[key]) !== JSON.stringify(originalUserData[key]);
+    }
+    return user[key] !== originalUserData[key];
+  }) ||
+  (req.body.password && req.body.password !== user.password);
+
+  
 
     if (isUserDataChanged) {
       await user.save();
       res.status(200).json({
         message: "Profile Updated Succesfully",
       });
+      console.log(user)
     } else {
       return res.status(201).json({
         message: "No changes made",
