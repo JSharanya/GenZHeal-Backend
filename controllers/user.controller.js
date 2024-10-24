@@ -29,10 +29,11 @@ export const updateUserProfile = async (req, res) => {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;
     user.profilePicture = req.body.profilePicture || user.profilePicture;
-    user.address.street = req.body.address;
+    user.address.street = req.body.address || user.address.street;
 
     console.log(user)
     console.log(req.body.address)
+    console.log(req.body.profilePicture)
 
     if (req.body.password) {
       user.password = req.body.password;
